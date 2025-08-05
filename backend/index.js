@@ -1,5 +1,7 @@
 const express = require('express');
 const path = require('path');
+require('dotenv').config();
+console.log('DEBUG: Twilio SID from .env is:', process.env.TWILIO_ACCOUNT_SID);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -29,6 +31,6 @@ app.use('/events', eventRoutes);
 app.use('/', eventRoutes); // This allows the eventRoutes to handle both /events and /positions paths
 
 // Start server
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on port ${PORT}`);
 });
