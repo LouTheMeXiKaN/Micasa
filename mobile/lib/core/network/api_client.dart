@@ -9,9 +9,24 @@ class ApiClient {
 
   ApiClient(this._dio, this._tokenStorageService) {
     _dio.options.baseUrl = Environment.apiBaseUrl;
-    _dio.options.headers = {'Content-Type': 'application/json'};
+    _dio.options.headers = {
+      'Content-Type': 'application/json',
+      'User-Agent': 'MicasaMobile/1.0 (Flutter; Dio)',
+    };
+    
+    // Set reasonable timeouts for Render's infrastructure
+    _dio.options.connectTimeout = const Duration(seconds: 90);
+    _dio.options.receiveTimeout = const Duration(seconds: 90);
+    _dio.options.sendTimeout = const Duration(seconds: 90);
     
     // Add interceptors for authentication and error handling
+    _dio.interceptors.add(LogInterceptor(
+      requestBody: true,
+      responseBody: true,
+      requestHeader: true,
+      responseHeader: true,
+      error: true,
+    ));
     _dio.interceptors.add(AuthInterceptor(_tokenStorageService));
     _dio.interceptors.add(ErrorInterceptor());
     // NOTE: A TokenRefreshInterceptor should be implemented here to handle 401s transparently.
