@@ -118,6 +118,7 @@ router.post('/register', async (req, res) => {
         privacyPastEventsIncludeHosted: true,
         privacyPastEventsIncludeCollaborated: true,
         privacyPastEventsIncludeAttended: true,
+        createdAt: true,
       },
     });
 
@@ -142,6 +143,7 @@ router.post('/register', async (req, res) => {
       privacy_past_events_include_hosted: user.privacyPastEventsIncludeHosted,
       privacy_past_events_include_collaborated: user.privacyPastEventsIncludeCollaborated,
       privacy_past_events_include_attended: user.privacyPastEventsIncludeAttended,
+      created_at: user.createdAt.toISOString(),
     };
 
     res.status(201).json({
@@ -193,6 +195,7 @@ router.post('/login', async (req, res) => {
         privacyPastEventsIncludeHosted: true,
         privacyPastEventsIncludeCollaborated: true,
         privacyPastEventsIncludeAttended: true,
+        createdAt: true,
       },
     });
 
@@ -234,6 +237,7 @@ router.post('/login', async (req, res) => {
       privacy_past_events_include_hosted: user.privacyPastEventsIncludeHosted,
       privacy_past_events_include_collaborated: user.privacyPastEventsIncludeCollaborated,
       privacy_past_events_include_attended: user.privacyPastEventsIncludeAttended,
+      created_at: user.createdAt.toISOString(),
     };
 
     res.status(200).json({
