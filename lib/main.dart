@@ -13,6 +13,8 @@ import 'features/profile/data/repositories/profile_repository.dart';
 import 'features/profile/data/services/profile_api_service.dart';
 import 'features/events/data/repositories/event_repository.dart';
 import 'features/events/data/services/event_api_service.dart';
+import 'features/collaboration/data/repositories/collaboration_repository.dart';
+import 'features/collaboration/data/services/collaboration_api_service.dart';
 import 'router/app_router.dart';
 
 void main() async {
@@ -50,10 +52,17 @@ void main() async {
     eventApiService: eventApiService,
   );
   
+  // Initialize collaboration services
+  final collaborationApiService = CollaborationApiService(apiClient);
+  final collaborationRepository = CollaborationRepository(
+    apiService: collaborationApiService,
+  );
+  
   runApp(MicasaApp(
     authRepository: authRepository,
     profileRepository: profileRepository,
     eventRepository: eventRepository,
+    collaborationRepository: collaborationRepository,
   ));
 }
 
@@ -61,12 +70,14 @@ class MicasaApp extends StatefulWidget {
   final AuthRepository authRepository;
   final ProfileRepository profileRepository;
   final EventRepository eventRepository;
+  final CollaborationRepository collaborationRepository;
   
   const MicasaApp({
     Key? key,
     required this.authRepository,
     required this.profileRepository,
     required this.eventRepository,
+    required this.collaborationRepository,
   }) : super(key: key);
 
   @override
@@ -94,6 +105,7 @@ class _MicasaAppState extends State<MicasaApp> {
         RepositoryProvider.value(value: widget.authRepository),
         RepositoryProvider.value(value: widget.profileRepository),
         RepositoryProvider.value(value: widget.eventRepository),
+        RepositoryProvider.value(value: widget.collaborationRepository),
       ],
       child: BlocProvider.value(
         value: authBloc,

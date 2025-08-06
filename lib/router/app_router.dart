@@ -16,6 +16,10 @@ import '../features/events/presentation/screens/event_management_screen.dart';
 import '../features/events/presentation/cubits/event_creation_step1/event_creation_step1_state.dart';
 import '../features/community/presentation/screens/my_community_screen.dart';
 import '../features/profile/presentation/screens/profile_hub_screen.dart';
+import '../features/collaboration/presentation/screens/event_collaboration_hub_screen.dart';
+import '../features/collaboration/presentation/screens/create_edit_position_screen.dart';
+import '../features/collaboration/presentation/screens/applicant_list_screen.dart';
+import '../features/collaboration/data/models/position_models.dart';
 
 class AppRouter {
   final AuthBloc authBloc;
@@ -84,6 +88,43 @@ class AppRouter {
         builder: (context, state) {
           final eventId = state.pathParameters['eventId']!;
           return EventManagementScreen(eventId: eventId);
+        },
+      ),
+      // Collaboration management routes
+      GoRoute(
+        path: '/collaboration/:eventId',
+        builder: (context, state) {
+          final eventId = state.pathParameters['eventId']!;
+          return EventCollaborationHubScreen(eventId: eventId);
+        },
+      ),
+      GoRoute(
+        path: '/collaboration/:eventId/position/create',
+        builder: (context, state) {
+          final eventId = state.pathParameters['eventId']!;
+          return CreateEditPositionScreen(eventId: eventId);
+        },
+      ),
+      GoRoute(
+        path: '/collaboration/:eventId/position/:positionId/edit',
+        builder: (context, state) {
+          final eventId = state.pathParameters['eventId']!;
+          final position = state.extra as OpenPosition?;
+          return CreateEditPositionScreen(
+            eventId: eventId,
+            editPosition: position,
+          );
+        },
+      ),
+      GoRoute(
+        path: '/collaboration/applicants/:positionId',
+        builder: (context, state) {
+          final positionId = state.pathParameters['positionId']!;
+          final positionTitle = state.extra as String? ?? 'Position';
+          return ApplicantListScreen(
+            positionId: positionId,
+            positionTitle: positionTitle,
+          );
         },
       ),
     ],

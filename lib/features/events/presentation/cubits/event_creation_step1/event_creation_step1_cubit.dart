@@ -73,4 +73,20 @@ class EventCreationStep1Cubit extends Cubit<EventCreationStep1State> {
 
   // Get the current state for Step 2
   EventCreationStep1State getCurrentData() => state;
+  
+  // Validate all fields and show errors
+  void validateAllFields() {
+    // Touch all fields to show validation errors
+    final title = EventTitle.dirty(state.title.value);
+    final location = EventLocation.dirty(state.location.value);
+    final startTime = EventDateTime.dirty(state.startTime.value);
+    final endTime = EventDateTime.dirty(state.endTime.value);
+    
+    emit(state.copyWith(
+      title: title,
+      location: location,
+      startTime: startTime,
+      endTime: endTime,
+    ));
+  }
 }

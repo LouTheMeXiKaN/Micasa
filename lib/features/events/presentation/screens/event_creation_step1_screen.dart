@@ -330,7 +330,7 @@ class _LocationInput extends StatelessWidget {
           hint: 'Where will this event take place?',
           onChanged: (location) => 
               context.read<EventCreationStep1Cubit>().locationChanged(location),
-          errorText: state.location.isNotValid && state.location.value.isNotEmpty
+          errorText: state.location.isNotValid && !state.location.isPure
               ? _getLocationErrorText(state.location.error)
               : null,
           maxLength: 200,
@@ -358,15 +358,24 @@ class _NextButton extends StatelessWidget {
       builder: (context, state) {
         return AuthButton(
           text: 'Next',
-          onPressed: state.isValid
-              ? () {
-                  // Navigate to Step 2 with the current state data
-                  context.pushReplacement(
-                    '/event/create/step2',
-                    extra: state,
-                  );
-                }
-              : null,
+          onPressed: () {
+            if (state.isValid) {
+              // Navigate to Step 2 with the current state data
+              context.pushReplacement(
+                '/event/create/step2',
+                extra: state,
+              );
+            } else {
+              // Validate all fields to show errors
+              context.read<EventCreationStep1Cubit>().validateAllFields();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: const Text('Please fill in all required fields'),
+                  backgroundColor: AppColors.coralRed,
+                ),
+              );
+            }
+          },
         );
       },
     );
