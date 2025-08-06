@@ -66,6 +66,12 @@ dependencies:
   
   # Utils
   intl: ^0.18.1
+  
+  # Image Picker
+  image_picker: ^1.0.4
+  
+  # Sharing
+  share_plus: ^7.2.1
 
 dev_dependencies:
   flutter_test:
@@ -91,6 +97,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - .env
     - assets/icons/
     - assets/images/
 

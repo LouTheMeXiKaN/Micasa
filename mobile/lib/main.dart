@@ -9,6 +9,10 @@ import 'features/auth/data/repositories/auth_repository.dart';
 import 'features/auth/data/services/auth_api_service.dart';
 import 'features/auth/data/services/token_storage_service.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
+import 'features/profile/data/repositories/profile_repository.dart';
+import 'features/profile/data/services/profile_api_service.dart';
+import 'features/events/data/repositories/event_repository.dart';
+import 'features/events/data/services/event_api_service.dart';
 import 'router/app_router.dart';
 
 void main() async {
@@ -32,15 +36,37 @@ void main() async {
     tokenStorageService: tokenStorageService,
   );
   
-  runApp(MicasaApp(authRepository: authRepository));
+  // Initialize profile services
+  final profileApiService = ProfileApiService(apiClient);
+  final profileRepository = ProfileRepository(
+    profileApiService: profileApiService,
+    tokenStorageService: tokenStorageService,
+    authRepository: authRepository,
+  );
+  
+  // Initialize event services
+  final eventApiService = EventApiService(apiClient);
+  final eventRepository = EventRepository(
+    eventApiService: eventApiService,
+  );
+  
+  runApp(MicasaApp(
+    authRepository: authRepository,
+    profileRepository: profileRepository,
+    eventRepository: eventRepository,
+  ));
 }
 
 class MicasaApp extends StatefulWidget {
   final AuthRepository authRepository;
+  final ProfileRepository profileRepository;
+  final EventRepository eventRepository;
   
   const MicasaApp({
     Key? key,
     required this.authRepository,
+    required this.profileRepository,
+    required this.eventRepository,
   }) : super(key: key);
 
   @override
@@ -62,9 +88,13 @@ class _MicasaAppState extends State<MicasaApp> {
 
   @override
   Widget build(BuildContext context) {
-    // Provide the repository and the global AuthBloc to the app
-    return RepositoryProvider.value(
-      value: widget.authRepository,
+    // Provide the repositories and the global AuthBloc to the app
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider.value(value: widget.authRepository),
+        RepositoryProvider.value(value: widget.profileRepository),
+        RepositoryProvider.value(value: widget.eventRepository),
+      ],
       child: BlocProvider.value(
         value: authBloc,
         child: MaterialApp.router(

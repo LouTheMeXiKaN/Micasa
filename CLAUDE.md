@@ -1,33 +1,38 @@
 # Micasa MVP Project Constitution
 
 ## Technology Stack
-- Backend: Node.js with Express and Prisma ORM
-- Web Frontend: Next.js with React
-- Database: PostgreSQL
+- Backend: Node.js, Express, Prisma, PostgreSQL
+- Mobile: Flutter (BLoC for state management)
+- Web: Next.js (for future guest experience)
 
 ## Core Documentation (AUTHORITATIVE SOURCE OF TRUTH)
-Adhere strictly to these specifications for all tasks. Do not deviate from the defined schemas or flows. Your primary function is to implement the features detailed in these documents precisely.
+Adhere strictly to these specifications for all tasks.
 
-### Specifications
-- Scope of Work (SOW): @docs/sow-v8-updated.md
+---
+
+### **NEW: Implementation Blueprints**
+This section contains detailed, feature-specific implementation plans.
+
+**RULE: When a specific Implementation Blueprint exists for a feature, it is the PRIMARY source of truth and OVERRIDES the general specifications in the SOW or Screen Lists for that feature.**
+
+- **Authentication Flow:** @docs/implementation_plan_revised.md
+
+---
+
+### General Specifications
 - API Contract: @docs/API Contract 1.4.md
 - Database Schema: @docs/DTDatabase Schema1.0.md
-- Design System: @docs/micasa-design-system.md
+- Scope of Work (SOW): @docs/sow-v8-updated.md
 
 ### User Experience & Flows
 - Mobile Screen List (SL7): @docs/SL7.md
-- Web Screen List: @docs/web-screen-list-v2-6-complete.md
+- Web Screen List: @docs/web-screen-list-v2-6-complete (1).md
+- Micasa Design System: @docs/micasa-design-system.md
 
 ## Workflow Rules
-1.  Implement backend APIs exactly as defined in the API Contract.
-2.  Implement web UIs exactly as defined in the Web Screen List and guided by the Design System.
-3.  All database changes must conform to the Database Schema using Prisma migrations.
-4.  You are an expert software engineer. When a plan is approved, execute it efficiently.
+1. Implement mobile UIs exactly as defined in the screen lists and design system, unless overridden by a specific Implementation Blueprint.
+2. Use the BLoC pattern for all state management.
+3. All API calls must match the definitions in the API Contract.
 
 ## File Boundaries (Negative Constraints)
-DO NOT edit, modify, or delete the following files or directories:
-- .env
-- .git/
-- .github/
-- node_modules/
-- CLAUDE.md
+DO NOT edit or delete: .env, .gitignore, node_modules/, dist/, .dockerignore
