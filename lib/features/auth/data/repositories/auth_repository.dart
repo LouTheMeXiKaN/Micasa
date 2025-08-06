@@ -99,5 +99,10 @@ class AuthRepository {
     _userController.add(null);
   }
 
+  // Method to update user stream when profile is updated externally
+  void updateUserStream(User user) {
+    _userController.add(user);
+  }
+
   void dispose() => _userController.close();
 }

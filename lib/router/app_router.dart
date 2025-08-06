@@ -5,9 +5,17 @@ import '../features/auth/presentation/bloc/auth_bloc.dart';
 import '../features/auth/presentation/bloc/auth_state.dart';
 import '../features/auth/presentation/screens/auth_screen.dart';
 import '../features/auth/presentation/screens/email_auth_screen.dart';
+import '../features/navigation/presentation/screens/main_app_shell.dart';
 // Placeholder screens (Assuming these will be implemented)
 import '../features/dashboard/presentation/screens/dashboard_screen.dart'; 
 import '../features/profile/presentation/screens/profile_setup_screen.dart';
+import '../features/events/presentation/screens/my_events_screen.dart';
+import '../features/events/presentation/screens/event_creation_step1_screen.dart';
+import '../features/events/presentation/screens/event_creation_step2_screen.dart';
+import '../features/events/presentation/screens/event_management_screen.dart';
+import '../features/events/presentation/cubits/event_creation_step1/event_creation_step1_state.dart';
+import '../features/community/presentation/screens/my_community_screen.dart';
+import '../features/profile/presentation/screens/profile_hub_screen.dart';
 
 class AppRouter {
   final AuthBloc authBloc;
@@ -29,13 +37,54 @@ class AppRouter {
         ],
       ),
       GoRoute(
-        path: '/dashboard',
-        builder: (context, state) => const DashboardScreen(),
-      ),
-      GoRoute(
         // Screen 25: Mandatory Profile Initialization Gate
         path: '/profile-setup',
         builder: (context, state) => const ProfileSetupScreen(),
+      ),
+      // Main app shell with bottom navigation
+      ShellRoute(
+        builder: (context, state, child) => MainAppShell(child: child),
+        routes: [
+          GoRoute(
+            path: '/dashboard',
+            builder: (context, state) => const DashboardScreen(),
+          ),
+          GoRoute(
+            path: '/my-events',
+            builder: (context, state) => const MyEventsScreen(),
+          ),
+          GoRoute(
+            path: '/my-community',
+            builder: (context, state) => const MyCommunityScreen(),
+          ),
+          GoRoute(
+            path: '/profile',
+            builder: (context, state) => const ProfileHubScreen(),
+          ),
+        ],
+      ),
+      // Event creation routes (outside of shell for full-screen experience)
+      GoRoute(
+        path: '/event/create',
+        builder: (context, state) => const EventCreationStep1Screen(),
+      ),
+      GoRoute(
+        path: '/event/create/step2',
+        builder: (context, state) {
+          final step1Data = state.extra as EventCreationStep1State?;
+          if (step1Data == null) {
+            // If no step1 data, redirect back to step 1
+            return const EventCreationStep1Screen();
+          }
+          return EventCreationStep2Screen(step1Data: step1Data);
+        },
+      ),
+      GoRoute(
+        path: '/event/manage/:eventId',
+        builder: (context, state) {
+          final eventId = state.pathParameters['eventId']!;
+          return EventManagementScreen(eventId: eventId);
+        },
       ),
     ],
     // Centralized redirection logic listening to AuthBloc
