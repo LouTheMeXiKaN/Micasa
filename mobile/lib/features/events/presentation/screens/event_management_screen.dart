@@ -257,12 +257,7 @@ class EventManagementView extends StatelessWidget {
               icon: Icons.group_outlined,
               isEnabled: eventData.permissions.canManageTeam,
               onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('✨ Manage Team functionality coming soon!'),
-                    backgroundColor: AppColors.successGreen,
-                  ),
-                );
+                context.push('/collaboration/${eventData.event.id}');
               },
             ),
             if (eventData.permissions.canEditDetails)

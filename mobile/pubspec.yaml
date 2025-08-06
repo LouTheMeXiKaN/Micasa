@@ -72,6 +72,9 @@ dependencies:
   
   # Sharing
   share_plus: ^7.2.1
+  
+  # URL Launcher
+  url_launcher: ^6.2.2
 
 dev_dependencies:
   flutter_test:

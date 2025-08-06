@@ -214,7 +214,7 @@ class _LocationVisibilitySection extends StatelessWidget {
               _buildRadioOption<LocationVisibility>(
                 title: 'Show address only to confirmed guests',
                 subtitle: 'Only people who RSVP can see the address',
-                value: LocationVisibility.onConfirmation,
+                value: LocationVisibility.confirmedGuests,
                 groupValue: state.locationVisibility,
                 onChanged: (value) => context
                     .read<EventCreationStep2Cubit>()

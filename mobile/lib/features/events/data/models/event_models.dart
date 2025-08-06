@@ -4,7 +4,7 @@ enum EventPrivacy { public, inviteOnly }
 
 enum LocationVisibility { 
   immediate, 
-  onConfirmation, 
+  confirmedGuests, 
   twentyFourHoursBefore 
 }
 
@@ -58,22 +58,16 @@ class Event extends Equatable {
 
   factory Event.fromJson(Map<String, dynamic> json) {
     return Event(
-      id: json['id'] as String?,
+      id: json['event_id'] as String? ?? json['id'] as String?,
       title: json['title'] as String,
       description: json['description'] as String,
       startTime: DateTime.parse(json['start_time'] as String),
       endTime: DateTime.parse(json['end_time'] as String),
-      location: json['location'] as String,
+      location: json['location_address'] as String? ?? json['location'] as String,
       coverImageUrl: json['cover_image_url'] as String?,
-      locationVisibility: LocationVisibility.values.firstWhere(
-        (e) => e.name == json['location_visibility'],
-        orElse: () => LocationVisibility.immediate,
-      ),
-      pricingModel: PricingModel.values.firstWhere(
-        (e) => e.name == json['pricing_model'],
-        orElse: () => PricingModel.freeRsvp,
-      ),
-      ticketPrice: json['ticket_price']?.toDouble(),
+      locationVisibility: _parseLocationVisibility(json['location_visibility'] as String),
+      pricingModel: _parsePricingModel(json['pricing_model'] as String),
+      ticketPrice: json['price_fixed']?.toDouble() ?? json['ticket_price']?.toDouble(),
       minimumPrice: json['minimum_price']?.toDouble(),
       suggestedPrice: json['suggested_price']?.toDouble(),
       suggestedDonation: json['suggested_donation']?.toDouble(),
@@ -85,7 +79,9 @@ class Event extends Equatable {
       privacy: json['is_invite_only'] == true 
           ? EventPrivacy.inviteOnly 
           : EventPrivacy.public,
-      createdAt: DateTime.parse(json['created_at'] as String),
+      createdAt: json['created_at'] != null 
+          ? DateTime.parse(json['created_at'] as String)
+          : DateTime.now(),
     );
   }
 
@@ -97,9 +93,10 @@ class Event extends Equatable {
       'start_time': startTime.toIso8601String(),
       'end_time': endTime.toIso8601String(),
       'location': location,
+      'location_address': location, // Required by API
       if (coverImageUrl != null) 'cover_image_url': coverImageUrl,
-      'location_visibility': locationVisibility.name,
-      'pricing_model': pricingModel.name,
+      'location_visibility': _mapLocationVisibility(locationVisibility),
+      'pricing_model': _mapPricingModel(pricingModel),
       if (ticketPrice != null) 'ticket_price': ticketPrice,
       if (minimumPrice != null) 'minimum_price': minimumPrice,
       if (suggestedPrice != null) 'suggested_price': suggestedPrice,
@@ -171,6 +168,58 @@ class Event extends Equatable {
         privacy,
         createdAt,
       ];
+
+  static String _mapLocationVisibility(LocationVisibility visibility) {
+    switch (visibility) {
+      case LocationVisibility.immediate:
+        return 'immediate';
+      case LocationVisibility.confirmedGuests:
+        return 'confirmed_guests';
+      case LocationVisibility.twentyFourHoursBefore:
+        return '24_hours_before';
+    }
+  }
+
+  static LocationVisibility _parseLocationVisibility(String value) {
+    switch (value) {
+      case 'immediate':
+        return LocationVisibility.immediate;
+      case 'confirmed_guests':
+        return LocationVisibility.confirmedGuests;
+      case '24_hours_before':
+        return LocationVisibility.twentyFourHoursBefore;
+      default:
+        return LocationVisibility.immediate;
+    }
+  }
+
+  static String _mapPricingModel(PricingModel model) {
+    switch (model) {
+      case PricingModel.freeRsvp:
+        return 'free_rsvp';
+      case PricingModel.fixedPrice:
+        return 'fixed_price';
+      case PricingModel.chooseYourPrice:
+        return 'choose_your_price';
+      case PricingModel.donationBased:
+        return 'donation_based';
+    }
+  }
+
+  static PricingModel _parsePricingModel(String value) {
+    switch (value) {
+      case 'free_rsvp':
+        return PricingModel.freeRsvp;
+      case 'fixed_price':
+        return PricingModel.fixedPrice;
+      case 'choose_your_price':
+        return PricingModel.chooseYourPrice;
+      case 'donation_based':
+        return PricingModel.donationBased;
+      default:
+        return PricingModel.freeRsvp;
+    }
+  }
 }
 
 class CreateEventResponse {
@@ -181,8 +230,16 @@ class CreateEventResponse {
   });
 
   factory CreateEventResponse.fromJson(Map<String, dynamic> json) {
-    return CreateEventResponse(
-      event: Event.fromJson(json['event'] as Map<String, dynamic>),
-    );
+    // Handle both wrapped and unwrapped responses
+    if (json.containsKey('event')) {
+      return CreateEventResponse(
+        event: Event.fromJson(json['event'] as Map<String, dynamic>),
+      );
+    } else {
+      // Direct event data from backend
+      return CreateEventResponse(
+        event: Event.fromJson(json),
+      );
+    }
   }
 }

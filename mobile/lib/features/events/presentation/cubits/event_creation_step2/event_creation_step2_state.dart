@@ -14,7 +14,7 @@ class EventCreationStep2State extends Equatable {
   final Event? createdEvent;
 
   const EventCreationStep2State({
-    this.locationVisibility = LocationVisibility.onConfirmation,
+    this.locationVisibility = LocationVisibility.confirmedGuests,
     this.pricingModel = PricingModel.freeRsvp,
     this.maxCapacity = const MaxCapacity.pure(),
     this.guestListVisibility = GuestListVisibility.public,
