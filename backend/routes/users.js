@@ -267,6 +267,68 @@ router.put('/me', authenticateToken, updateProfileValidation, async (req, res) =
   }
 });
 
+// GET /users/me/events - Get authenticated user's events
+router.get('/me/events', authenticateToken, async (req, res) => {
+  try {
+    const { status, role } = req.query;
+    const userId = req.userId;
+    
+    // Build where clause based on filters
+    const whereClause = {
+      hostUserId: userId // For now, only return events where user is host
+    };
+    
+    // Add status filter
+    const now = new Date();
+    if (status === 'upcoming') {
+      whereClause.startTime = { gte: now };
+      whereClause.status = 'published';
+    } else if (status === 'past') {
+      whereClause.endTime = { lt: now };
+    }
+    
+    // Fetch events from database
+    const events = await prisma.event.findMany({
+      where: whereClause,
+      orderBy: {
+        startTime: status === 'past' ? 'desc' : 'asc'
+      }
+    });
+    
+    // Format response
+    const formattedEvents = events.map(event => ({
+      event_id: event.id,
+      host_user_id: event.hostUserId,
+      title: event.title,
+      description: event.description,
+      cover_image_url: event.coverImageUrl,
+      start_time: event.startTime.toISOString(),
+      end_time: event.endTime.toISOString(),
+      location_address: event.locationAddress,
+      location_visibility: event.locationVisibility,
+      pricing_model: event.pricingModel,
+      price_fixed: event.priceFixed,
+      guest_list_visibility: event.guestListVisibility,
+      is_invite_only: event.isInviteOnly,
+      max_capacity: event.maxCapacity,
+      status: event.status,
+      current_user_role: 'host' // User is always host for their own events
+    }));
+    
+    res.json({
+      events: formattedEvents,
+      total_count: formattedEvents.length
+    });
+    
+  } catch (error) {
+    console.error('Error fetching user events:', error);
+    res.status(500).json({
+      error_code: 'INTERNAL_ERROR',
+      message: 'Failed to retrieve user events'
+    });
+  }
+});
+
 // GET /users/:userId - Get public profile of a user
 router.get('/:userId', [
   param('userId').isUUID().withMessage('Invalid user ID format')
