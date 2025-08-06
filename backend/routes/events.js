@@ -421,6 +421,114 @@ router.put('/:eventId', authenticateToken, [
 });
 
 // =============================================
+// EVENT COLLABORATION HUB ENDPOINT
+// =============================================
+
+// GET /events/:eventId/team - Get collaboration hub data
+router.get('/:eventId/team', authenticateToken, [
+  param('eventId').isUUID().withMessage('Invalid event ID format')
+], async (req, res) => {
+  try {
+    // Check for validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        error_code: 'VALIDATION_FAILED',
+        message: 'Invalid event ID format',
+        details: errors.array()
+      });
+    }
+
+    const eventId = req.params.eventId;
+
+    // Check if event exists and user has permission
+    const event = await prisma.event.findUnique({
+      where: { id: eventId }
+    });
+
+    if (!event) {
+      return res.status(404).json({
+        error_code: 'RESOURCE_NOT_FOUND',
+        message: 'The requested event could not be found'
+      });
+    }
+
+    // Check if user has permission to view collaboration data
+    const { hasPermission } = await checkEventPermission(eventId, req.userId);
+    
+    if (!hasPermission) {
+      return res.status(403).json({
+        error_code: 'FORBIDDEN',
+        message: 'Only event hosts and co-hosts can view collaboration data'
+      });
+    }
+
+    // Get open positions with application counts
+    const openPositions = await prisma.openPosition.findMany({
+      where: { 
+        eventId: eventId,
+        status: 'open'
+      },
+      include: {
+        _count: {
+          select: { 
+            applications: {
+              where: { status: 'pending' }
+            }
+          }
+        }
+      }
+    });
+
+    // TODO: Get confirmed team members (hosts, co-hosts, collaborators)
+    // For now, just return the host as the only team member
+    const host = await prisma.user.findUnique({
+      where: { id: event.hostUserId },
+      select: {
+        id: true,
+        username: true,
+        profilePictureUrl: true
+      }
+    });
+
+    const confirmedTeam = host ? [{
+      collaboration_id: null, // Host doesn't have a collaboration record
+      user_id: host.id,
+      username: host.username,
+      profile_picture_url: host.profilePictureUrl,
+      role_title: 'Host',
+      profit_share_percentage: 100, // Host owns 100% by default
+      is_cohost: false
+    }] : [];
+
+    // TODO: Get pending proposals when Collaboration model is implemented
+    const pendingProposals = [];
+
+    // Format the response according to API contract
+    const response = {
+      confirmed_team: confirmedTeam,
+      pending_proposals: pendingProposals,
+      open_positions: openPositions.map(position => ({
+        position_id: position.id,
+        role_title: position.roleTitle,
+        profit_share_percentage: position.profitSharePercentage ? 
+          parseFloat(position.profitSharePercentage.toString()) : null,
+        applicant_count: position._count.applications
+      }))
+    };
+
+    res.json(response);
+
+  } catch (error) {
+    console.error('Error fetching collaboration data:', error);
+    res.status(500).json({
+      error_code: 'INTERNAL_ERROR',
+      message: 'Failed to retrieve collaboration data'
+    });
+  }
+});
+
+// =============================================
 // OPEN POSITION MANAGEMENT ENDPOINTS
 // =============================================
 
@@ -1037,6 +1145,82 @@ router.post('/applications/:applicationId/manage', authenticateToken, [
     res.status(500).json({
       error_code: 'INTERNAL_ERROR',
       message: 'Failed to manage application'
+    });
+  }
+});
+
+// DELETE /applications/:applicationId - Withdraw application (Applicant only)
+router.delete('/applications/:applicationId', authenticateToken, [
+  param('applicationId').isUUID().withMessage('Invalid application ID format')
+], async (req, res) => {
+  try {
+    // Check for validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        error_code: 'VALIDATION_FAILED',
+        message: 'Invalid application ID format',
+        details: errors.array()
+      });
+    }
+
+    const applicationId = req.params.applicationId;
+    const userId = req.userId;
+
+    // Find the application
+    const application = await prisma.application.findUnique({
+      where: { id: applicationId },
+      include: {
+        position: {
+          select: { status: true }
+        }
+      }
+    });
+
+    if (!application) {
+      return res.status(404).json({
+        error_code: 'RESOURCE_NOT_FOUND',
+        message: 'The requested application could not be found'
+      });
+    }
+
+    // Check if user owns this application
+    if (application.userId !== userId) {
+      return res.status(403).json({
+        error_code: 'FORBIDDEN',
+        message: 'You can only withdraw your own applications'
+      });
+    }
+
+    // Check if application is still pending
+    if (application.status !== 'pending') {
+      return res.status(409).json({
+        error_code: 'INVALID_OPERATION',
+        message: 'You can only withdraw pending applications'
+      });
+    }
+
+    // Check if position is already filled
+    if (application.position.status === 'filled') {
+      return res.status(409).json({
+        error_code: 'INVALID_OPERATION',
+        message: 'Cannot withdraw application from a filled position'
+      });
+    }
+
+    // Update application status to withdrawn
+    await prisma.application.update({
+      where: { id: applicationId },
+      data: { status: 'withdrawn' }
+    });
+
+    res.status(204).send();
+
+  } catch (error) {
+    console.error('Error withdrawing application:', error);
+    res.status(500).json({
+      error_code: 'INTERNAL_ERROR',
+      message: 'Failed to withdraw application'
     });
   }
 });

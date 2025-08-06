@@ -145,7 +145,7 @@ router.get('/me', authenticateToken, async (req, res) => {
 
     if (!user) {
       return res.status(404).json({
-        error: 'User not found',
+        error_code: 'USER_NOT_FOUND',
         message: 'User profile could not be retrieved'
       });
     }
@@ -155,7 +155,7 @@ router.get('/me', authenticateToken, async (req, res) => {
   } catch (error) {
     console.error('Error fetching user profile:', error);
     res.status(500).json({
-      error: 'Internal server error',
+      error_code: 'INTERNAL_ERROR',
       message: 'Failed to retrieve user profile'
     });
   }
@@ -168,7 +168,7 @@ router.put('/me', authenticateToken, updateProfileValidation, async (req, res) =
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({
-        error: 'Validation failed',
+        error_code: 'VALIDATION_FAILED',
         message: 'Invalid input data',
         details: errors.array()
       });
@@ -212,7 +212,7 @@ router.put('/me', authenticateToken, updateProfileValidation, async (req, res) =
 
       if (existingUser) {
         return res.status(409).json({
-          error: 'Username taken',
+          error_code: 'USERNAME_TAKEN',
           message: 'This username is already in use'
         });
       }
@@ -229,7 +229,7 @@ router.put('/me', authenticateToken, updateProfileValidation, async (req, res) =
 
       if (existingUser) {
         return res.status(409).json({
-          error: 'Phone number taken',
+          error_code: 'PHONE_NUMBER_TAKEN',
           message: 'This phone number is already in use'
         });
       }
@@ -255,13 +255,13 @@ router.put('/me', authenticateToken, updateProfileValidation, async (req, res) =
     if (error.code === 'P2002') {
       const field = error.meta?.target?.[0];
       return res.status(409).json({
-        error: 'Duplicate value',
+        error_code: 'DUPLICATE_VALUE',
         message: `${field} is already in use`
       });
     }
 
     res.status(500).json({
-      error: 'Internal server error',
+      error_code: 'INTERNAL_ERROR',
       message: 'Failed to update user profile'
     });
   }
@@ -288,7 +288,7 @@ router.get('/:userId', [
 
     if (!user) {
       return res.status(404).json({
-        error: 'User not found',
+        error_code: 'USER_NOT_FOUND',
         message: 'The requested user profile does not exist'
       });
     }
@@ -299,7 +299,7 @@ router.get('/:userId', [
   } catch (error) {
     console.error('Error fetching public user profile:', error);
     res.status(500).json({
-      error: 'Internal server error',
+      error_code: 'INTERNAL_ERROR',
       message: 'Failed to retrieve user profile'
     });
   }
@@ -313,20 +313,20 @@ router.post('/me/avatar', authenticateToken, (req, res) => {
         if (err instanceof multer.MulterError) {
           if (err.code === 'LIMIT_FILE_SIZE') {
             return res.status(400).json({
-              error: 'File too large',
+              error_code: 'FILE_TOO_LARGE',
               message: 'Profile picture must be smaller than 5MB'
             });
           }
         }
         return res.status(400).json({
-          error: 'Upload failed',
+          error_code: 'UPLOAD_FAILED',
           message: err.message || 'Failed to upload profile picture'
         });
       }
 
       if (!req.file) {
         return res.status(400).json({
-          error: 'No file provided',
+          error_code: 'NO_FILE_PROVIDED',
           message: 'Please select a profile picture to upload'
         });
       }
@@ -358,11 +358,81 @@ router.post('/me/avatar', authenticateToken, (req, res) => {
       }
 
       res.status(500).json({
-        error: 'Internal server error',
+        error_code: 'INTERNAL_ERROR',
         message: 'Failed to upload profile picture'
       });
     }
   });
+});
+
+// GET /users/me/applications - Get user's applications
+router.get('/me/applications', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.userId;
+
+    // Get all applications for the authenticated user
+    const applications = await prisma.application.findMany({
+      where: { userId: userId },
+      include: {
+        position: {
+          include: {
+            event: {
+              select: {
+                id: true,
+                title: true,
+                startTime: true,
+                endTime: true,
+                hostUserId: true,
+                host: {
+                  select: {
+                    id: true,
+                    username: true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      orderBy: {
+        appliedAt: 'desc'
+      }
+    });
+
+    // Format the response
+    const formattedApplications = applications.map(app => ({
+      application_id: app.id,
+      status: app.status,
+      applied_at: app.appliedAt.toISOString(),
+      message: app.message,
+      position: {
+        position_id: app.position.id,
+        role_title: app.position.roleTitle,
+        profit_share_percentage: app.position.profitSharePercentage ? 
+          parseFloat(app.position.profitSharePercentage.toString()) : null,
+        status: app.position.status
+      },
+      event: {
+        event_id: app.position.event.id,
+        title: app.position.event.title,
+        start_time: app.position.event.startTime.toISOString(),
+        end_time: app.position.event.endTime.toISOString(),
+        host: {
+          user_id: app.position.event.host.id,
+          username: app.position.event.host.username
+        }
+      }
+    }));
+
+    res.json(formattedApplications);
+
+  } catch (error) {
+    console.error('Error fetching user applications:', error);
+    res.status(500).json({
+      error_code: 'INTERNAL_ERROR',
+      message: 'Failed to retrieve applications'
+    });
+  }
 });
 
 module.exports = router;
