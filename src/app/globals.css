@@ -1,0 +1,56 @@
+/* Import Inter font - must be first */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+@import "tailwindcss";
+
+@theme inline {
+  /* Micasa Color Palette */
+  --color-primary: #FF6B35;
+  --color-primary-dark: #E65119;
+  --color-background: #F9F8F4;
+  --color-surface: #FFFFFF;
+  --color-text-primary: #1A1A1A;
+  --color-text-secondary: #666666;
+  --color-border-color: #E0E0E0;
+  --color-success: #4CAF50;
+  --color-error: #F44336;
+  
+  /* Font Configuration */
+  --font-sans: 'Inter', 'Helvetica Neue', 'Arial', sans-serif;
+  
+  /* Box Shadows */
+  --shadow-soft: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-medium: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+body {
+  background: theme(colors.background);
+  color: theme(colors.text-primary);
+  font-family: theme(fontFamily.sans);
+}
+
+/* Utility classes for common components (Design System) */
+@layer components {
+  .btn-primary {
+    @apply bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary-dark transition-colors disabled:opacity-50;
+    box-shadow: theme(boxShadow.soft);
+  }
+
+  .btn-secondary {
+    @apply bg-surface text-text-primary font-semibold py-3 px-6 rounded-lg border border-border-color hover:bg-gray-100 transition-colors disabled:opacity-50;
+    box-shadow: theme(boxShadow.soft);
+  }
+
+  .btn-ghost {
+    @apply text-text-secondary font-medium py-3 px-6 rounded-lg hover:text-text-primary hover:underline transition-colors disabled:opacity-50;
+  }
+
+  .card {
+    @apply bg-surface p-6 rounded-xl border border-border-color;
+    box-shadow: theme(boxShadow.medium);
+  }
+
+  .input-field {
+    @apply block w-full px-4 py-3 border border-border-color rounded-lg bg-surface text-text-primary focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary;
+  }
+}
