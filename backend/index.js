@@ -11,6 +11,7 @@ const PORT = process.env.PORT || 3000;
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const eventRoutes = require('./routes/events');
+const positionRoutes = require('./routes/positions');
 
 // CORS configuration
 const corsOptions = {
@@ -42,9 +43,7 @@ app.get('/', (req, res) => {
 app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
 app.use('/events', eventRoutes);
-// Position routes are handled within the events router for /events/:eventId/positions
-// and as standalone routes for /positions/:positionId
-app.use('/', eventRoutes); // This allows the eventRoutes to handle both /events and /positions paths
+app.use('/positions', positionRoutes);
 
 // Start server
 app.listen(PORT, '0.0.0.0', () => {
