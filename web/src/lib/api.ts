@@ -2,12 +2,12 @@
 import { EventDetails, UserEventContext, ProposalDetails, User, AuthResponse, ErrorResponse } from '@/types/index';
 
 // Base API URL - should be configured via environment variable in production
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.micasa.events/v1';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://micasa-g1w3.onrender.com';
 
 // Helper function to get auth token from localStorage/cookies
 const getAuthToken = (): string | null => {
   if (typeof window !== 'undefined') {
-    return localStorage.getItem('auth_token');
+    return localStorage.getItem('token');
   }
   return null;
 };
@@ -168,7 +168,7 @@ export const createProvisionalAccount = async (
     
     // Store the token
     if (typeof window !== 'undefined') {
-      localStorage.setItem('auth_token', authData.token);
+      localStorage.setItem('token', authData.token);
     }
     
     return { 
@@ -298,7 +298,7 @@ export const login = async (email: string, password: string): Promise<AuthRespon
     
     // Store the token
     if (typeof window !== 'undefined') {
-      localStorage.setItem('auth_token', authData.token);
+      localStorage.setItem('token', authData.token);
     }
     
     return authData;
@@ -311,6 +311,6 @@ export const login = async (email: string, password: string): Promise<AuthRespon
 // Logout helper
 export const logout = (): void => {
   if (typeof window !== 'undefined') {
-    localStorage.removeItem('auth_token');
+    localStorage.removeItem('token');
   }
 };

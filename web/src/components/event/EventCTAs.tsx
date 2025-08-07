@@ -2,6 +2,8 @@
 "use client";
 
 import { EventDetails, UserEventContext, PricingModel } from '@/types/index';
+import { useAuth } from '@/lib/auth-context';
+import { useState } from 'react';
 
 interface EventCTAsProps {
   event: EventDetails;
@@ -10,12 +12,49 @@ interface EventCTAsProps {
 
 export const EventCTAs: React.FC<EventCTAsProps> = ({ event, context }) => {
   const hasOpenPositions = event.open_positions.some(p => p.status === 'open');
+  const { user, setShowAuthModal, setAuthMode } = useAuth();
+  const [isCreatingRSVP, setIsCreatingRSVP] = useState(false);
 
-  const handlePrimaryAction = () => {
-    // This should trigger Screen W-2 (Conditional Checkout & RSVP Flow)
-    // Implementation of W-2 is out of scope for Stage 1.4.
-    console.log(`Triggering W-2 flow for pricing model: ${event.pricing_model}`);
-    alert(`Checkout/RSVP flow (W-2) will be implemented in the next stage.`);
+  const handlePrimaryAction = async () => {
+    // Check if user is authenticated
+    if (!user) {
+      // Open auth modal in signup mode
+      setAuthMode('signup');
+      setShowAuthModal(true);
+      return;
+    }
+
+    // User is authenticated, proceed with RSVP
+    setIsCreatingRSVP(true);
+    try {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://micasa-g1w3.onrender.com';
+      const token = localStorage.getItem('token');
+      
+      // Create RSVP/ticket
+      const response = await fetch(`${API_URL}/events/${event.event_id}/rsvp`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          rsvp_status: 'going'
+        })
+      });
+
+      if (response.ok) {
+        // Refresh the page to show updated RSVP status
+        window.location.reload();
+      } else {
+        const error = await response.json();
+        alert(error.message || 'Failed to RSVP');
+      }
+    } catch (error) {
+      console.error('RSVP error:', error);
+      alert('Failed to RSVP. Please try again.');
+    } finally {
+      setIsCreatingRSVP(false);
+    }
   };
 
   // W-1 Requirement: Secondary CTA scrolls smoothly to Open Positions section
@@ -37,9 +76,10 @@ export const EventCTAs: React.FC<EventCTAsProps> = ({ event, context }) => {
         <div className="container mx-auto max-w-4xl flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
             <button
                 onClick={handlePrimaryAction}
-                className="btn-primary flex-1"
+                disabled={isCreatingRSVP}
+                className="btn-primary flex-1 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-                {primaryButtonText}
+                {isCreatingRSVP ? 'Processing...' : primaryButtonText}
             </button>
 
             {hasOpenPositions && (
