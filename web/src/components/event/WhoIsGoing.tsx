@@ -56,10 +56,16 @@ const renderFullList = (count: number, attendees: EventDetails['attendees']) => 
       <p className="text-text-secondary">Be the first to RSVP!</p>
     ) : (
       <div className="space-y-4">
-        {attendees.slice(0, 5).map(user => (
-          <UserProfileLink key={user.user_id} user={user} size="small" />
-        ))}
-        {count > 5 && <p className="text-text-secondary mt-4">...and {count - 5} others.</p>}
+        {attendees && attendees.length > 0 ? (
+          <>
+            {attendees.slice(0, 5).map(user => (
+              <UserProfileLink key={user.user_id} user={user} size="small" />
+            ))}
+            {count > 5 && <p className="text-text-secondary mt-4">...and {count - 5} others.</p>}
+          </>
+        ) : (
+          <p className="text-text-secondary">Guest list is loading...</p>
+        )}
       </div>
     )}
   </section>
