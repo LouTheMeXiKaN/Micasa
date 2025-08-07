@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const path = require('path');
 require('dotenv').config();
 console.log('DEBUG: Twilio SID from .env is:', process.env.TWILIO_ACCOUNT_SID);
@@ -11,7 +12,22 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const eventRoutes = require('./routes/events');
 
+// CORS configuration
+const corsOptions = {
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:3001', 
+    'http://localhost:3002',
+    'http://localhost:3003',
+    'https://micasa.events',
+    'https://events.micasa.events'
+  ],
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
 // Middleware
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Serve static files for uploaded avatars
