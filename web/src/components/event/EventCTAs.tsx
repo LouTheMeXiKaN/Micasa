@@ -43,8 +43,8 @@ export const EventCTAs: React.FC<EventCTAsProps> = ({ event, context }) => {
       });
 
       if (response.ok) {
-        // Refresh the page to show updated RSVP status
-        window.location.reload();
+        // Redirect to success page
+        window.location.href = '/success?type=rsvp';
       } else {
         const error = await response.json();
         alert(error.message || 'Failed to RSVP');

@@ -71,9 +71,9 @@ export const ApplicationModal: React.FC<ApplicationModalProps> = ({
         throw new Error(data.message || 'Failed to submit application');
       }
 
-      // Success!
-      onSuccess();
+      // Success! Redirect to success page
       onClose();
+      window.location.href = '/success?type=application';
     } catch (err: any) {
       setError(err.message || 'An error occurred while submitting your application');
     } finally {
