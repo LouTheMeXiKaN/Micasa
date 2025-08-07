@@ -70,6 +70,15 @@ export const getEventDetails = async (eventId: string): Promise<{ details: Event
     
     const eventData = await handleApiResponse<EventDetails>(response);
     
+    // Ensure required arrays exist with defaults
+    const details: EventDetails = {
+      ...eventData,
+      team: eventData.team || [],
+      attendees: eventData.attendees || [],
+      open_positions: eventData.open_positions || [],
+      attendee_count: eventData.attendee_count || 0,
+    };
+    
     // Determine user context based on the response
     // The backend should include current_user_role in the response
     const context: UserEventContext = {
@@ -80,7 +89,7 @@ export const getEventDetails = async (eventId: string): Promise<{ details: Event
       rsvp_status: null, // This would need to be included in the response
     };
     
-    return { details: eventData, context };
+    return { details, context };
   } catch (error) {
     console.error('Error fetching event details:', error);
     throw error;
