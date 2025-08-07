@@ -198,21 +198,23 @@ function formatEventResponse(event, stats, currentUserRole) {
     });
   }
   
-  // Add collaborators if they exist
+  // Add collaborators to the team
   if (event.collaborations) {
     event.collaborations.forEach(collab => {
-      team.push({
-        collaboration_id: collab.id,
-        user: {
-          user_id: collab.user.id,
-          username: collab.user.username,
-          profile_picture_url: collab.user.profilePictureUrl,
-          bio: collab.user.bio
-        },
-        role_title: collab.roleTitle,
-        is_cohost: collab.isCohost,
-        profit_share_percentage: collab.profitSharePercentage
-      });
+      if (collab.user) {  // Only add if user exists (might be null for phone-only invites)
+        team.push({
+          collaboration_id: collab.id,
+          user: {
+            user_id: collab.user.id,
+            username: collab.user.username,
+            profile_picture_url: collab.user.profilePictureUrl,
+            bio: collab.user.bio
+          },
+          role_title: collab.roleTitle,
+          is_cohost: collab.isCohost,
+          profit_share_percentage: parseFloat(collab.profitSharePercentage.toString())
+        });
+      }
     });
   }
 
@@ -283,6 +285,13 @@ router.post('/', authenticateToken, createEventValidation, async (req, res) => {
         maxCapacity: max_capacity,
         status: 'published',
         currency: 'USD'
+      },
+      include: {
+        host: true,
+        collaborations: {
+          where: { status: 'accepted' },
+          include: { user: true }
+        }
       }
     });
 
@@ -325,8 +334,11 @@ router.get('/:eventId', [
       include: {
         host: true,  // Include host user data
         collaborations: {
+          where: {
+            status: 'accepted'  // Only show accepted collaborators
+          },
           include: {
-            user: true  // Include collaborator user data
+            user: true  // Include user details for each collaborator
           }
         }
       }
@@ -451,7 +463,14 @@ router.put('/:eventId', authenticateToken, [
     // Update the event
     const updatedEvent = await prisma.event.update({
       where: { id: eventId },
-      data: updateData
+      data: updateData,
+      include: {
+        host: true,
+        collaborations: {
+          where: { status: 'accepted' },
+          include: { user: true }
+        }
+      }
     });
 
     // Calculate updated stats and user role
