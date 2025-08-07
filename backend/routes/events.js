@@ -179,6 +179,43 @@ async function calculateEventStats(eventId) {
 
 // Helper function to format event response
 function formatEventResponse(event, stats, currentUserRole) {
+  // Build team array starting with the host
+  const team = [];
+  
+  // Add host as the first team member
+  if (event.host) {
+    team.push({
+      collaboration_id: `host-${event.id}`,  // Special ID for host
+      user: {
+        user_id: event.host.id,
+        username: event.host.username,
+        profile_picture_url: event.host.profilePictureUrl,
+        bio: event.host.bio
+      },
+      role_title: 'Host',
+      is_cohost: false,
+      profit_share_percentage: 100  // Host gets 100% by default unless split with collaborators
+    });
+  }
+  
+  // Add collaborators if they exist
+  if (event.collaborations) {
+    event.collaborations.forEach(collab => {
+      team.push({
+        collaboration_id: collab.id,
+        user: {
+          user_id: collab.user.id,
+          username: collab.user.username,
+          profile_picture_url: collab.user.profilePictureUrl,
+          bio: collab.user.bio
+        },
+        role_title: collab.roleTitle,
+        is_cohost: collab.isCohost,
+        profit_share_percentage: collab.profitSharePercentage
+      });
+    });
+  }
+
   return {
     event_id: event.id,
     host_user_id: event.hostUserId,
@@ -196,7 +233,11 @@ function formatEventResponse(event, stats, currentUserRole) {
     max_capacity: event.maxCapacity,
     status: event.status,
     stats: stats,
-    current_user_role: currentUserRole
+    current_user_role: currentUserRole,
+    team: team,  // Add team array
+    open_positions: [],  // TODO: fetch open positions
+    attendees: [],  // TODO: fetch attendees based on visibility rules
+    attendee_count: stats.registered_count || 0
   };
 }
 
@@ -278,9 +319,17 @@ router.get('/:eventId', [
 
     const eventId = req.params.eventId;
 
-    // Find the event
+    // Find the event with team data
     const event = await prisma.event.findUnique({
-      where: { id: eventId }
+      where: { id: eventId },
+      include: {
+        host: true,  // Include host user data
+        collaborations: {
+          include: {
+            user: true  // Include collaborator user data
+          }
+        }
+      }
     });
 
     if (!event) {
