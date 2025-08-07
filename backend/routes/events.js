@@ -891,6 +891,123 @@ router.delete('/positions/:positionId', authenticateToken, [
 });
 
 // =============================================
+// RSVP/TICKET ENDPOINTS
+// =============================================
+
+// POST /events/:eventId/rsvp - Create RSVP for free events
+router.post('/:eventId/rsvp', authenticateToken, [
+  param('eventId').isUUID().withMessage('Invalid event ID format'),
+  body('rsvp_status')
+    .optional()
+    .isIn(['going', 'maybe', 'not_going'])
+    .withMessage('RSVP status must be going, maybe, or not_going')
+], async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        error_code: 'VALIDATION_FAILED',
+        message: 'Invalid input data',
+        details: errors.array()
+      });
+    }
+
+    const eventId = req.params.eventId;
+    const userId = req.userId;
+    const rsvpStatus = req.body.rsvp_status || 'going';
+
+    // Find the event
+    const event = await prisma.event.findUnique({
+      where: { id: eventId },
+      include: {
+        tickets: {
+          where: { userId: userId }
+        }
+      }
+    });
+
+    if (!event) {
+      return res.status(404).json({
+        error_code: 'RESOURCE_NOT_FOUND',
+        message: 'Event not found'
+      });
+    }
+
+    // Check if event is free (only free events support RSVP)
+    if (event.pricingModel !== 'free_rsvp' && event.pricingModel !== 'donation_based') {
+      return res.status(400).json({
+        error_code: 'INVALID_OPERATION',
+        message: 'This event requires a ticket purchase, not an RSVP'
+      });
+    }
+
+    // Check capacity if going
+    if (rsvpStatus === 'going' && event.maxCapacity) {
+      const goingCount = await prisma.ticket.count({
+        where: {
+          eventId: eventId,
+          rsvpStatus: 'going'
+        }
+      });
+
+      if (goingCount >= event.maxCapacity) {
+        return res.status(409).json({
+          error_code: 'EVENT_FULL',
+          message: 'Sorry, this event is at capacity'
+        });
+      }
+    }
+
+    // Check if user already has a ticket
+    let ticket;
+    if (event.tickets.length > 0) {
+      // Update existing ticket
+      ticket = await prisma.ticket.update({
+        where: { id: event.tickets[0].id },
+        data: { rsvpStatus: rsvpStatus }
+      });
+    } else {
+      // Create new ticket
+      ticket = await prisma.ticket.create({
+        data: {
+          eventId: eventId,
+          userId: userId,
+          rsvpStatus: rsvpStatus,
+          // Extract referrer from headers if present
+          referrerUserId: req.headers['x-referrer-id'] || null
+        }
+      });
+
+      // Create event association
+      await prisma.eventAssociation.create({
+        data: {
+          eventId: eventId,
+          userId: userId,
+          role: 'attendee'
+        }
+      }).catch(() => {
+        // Ignore if already exists
+      });
+    }
+
+    res.json({
+      ticket_id: ticket.id,
+      rsvp_status: ticket.rsvpStatus,
+      message: rsvpStatus === 'going' ? "You're going!" : 
+               rsvpStatus === 'maybe' ? "Marked as interested" : 
+               "RSVP updated"
+    });
+
+  } catch (error) {
+    console.error('Error creating RSVP:', error);
+    res.status(500).json({
+      error_code: 'INTERNAL_ERROR',
+      message: 'Failed to create RSVP'
+    });
+  }
+});
+
+// =============================================
 // APPLICATION MANAGEMENT ENDPOINTS
 // =============================================
 
