@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Micasa Mobile - Manage Team</title>
+    <link rel="stylesheet" href="css/mobile_style.css">
+</head>
+<body>
+
+    <div class="mobile-screen">
+        <header class="mobile-header d-flex align-items-center">
+            <a href="index.html" style="text-decoration:none; color: inherit; position: absolute;">&larr; Back</a>
+            <h1 style="flex-grow: 1;">Manage Team</h1>
+        </header>
+
+        <main class="mobile-content">
+            <div class="d-flex gap-3 mb-4">
+                <a href="#" class="btn btn-primary" style="flex-grow: 1;">Invite Collaborator</a>
+                <a href="#" class="btn btn-secondary" style="flex-grow: 1;">Create Position</a>
+            </div>
+
+            <!-- Collaborators Section -->
+            <section>
+                <h3>Collaborators</h3>
+                <!-- Co-hosts subsection -->
+                <div class="card d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="https://via.placeholder.com/40x40.png/167070/F5F2F2?text=J" alt="Avatar" style="border-radius: var(--radius-full);">
+                        <div>
+                            <strong class="d-block">Jordan</strong>
+                            <span>Photographer</span>
+                        </div>
+                    </div>
+                    <span class="badge badge-cohost">Co-host</span>
+                </div>
+                <!-- Team Members subsection -->
+                 <div class="card d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="https://via.placeholder.com/40x40.png/44857D/F5F2F2?text=S" alt="Avatar" style="border-radius: var(--radius-full);">
+                        <div>
+                            <strong class="d-block">Sam</strong>
+                            <span>DJ</span>
+                        </div>
+                    </div>
+                    <span>15%</span>
+                </div>
+            </section>
+
+            <!-- Open Positions Section -->
+            <section class="mt-4">
+                <h3>Open Positions</h3>
+                <div class="card d-flex align-items-center justify-content-between">
+                    <div>
+                        <h4 class="mb-0">Installation Artist</h4>
+                        <p class="mb-0" style="color: var(--vibrant-orange);">3 new applicants</p>
+                    </div>
+                    <a href="#">View &rarr;</a>
+                </div>
+                 <div class="card d-flex align-items-center justify-content-between">
+                    <div>
+                        <h4 class="mb-0">Bartender</h4>
+                        <p class="mb-0">0 applicants</p>
+                    </div>
+                    <a href="#">View &rarr;</a>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/mobile_script.js" defer></script>
+</body>
+</html>

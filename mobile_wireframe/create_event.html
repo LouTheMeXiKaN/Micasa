@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Micasa Mobile - Create Event</title>
+    <link rel="stylesheet" href="css/mobile_style.css">
+</head>
+<body>
+
+    <div class="mobile-screen">
+        <header class="mobile-header d-flex align-items-center">
+            <a href="index.html" style="text-decoration:none; color: inherit; position: absolute;">&larr; Back</a>
+            <h1 style="flex-grow: 1;">Create Event</h1>
+        </header>
+
+        <main class="mobile-content">
+            <!-- Step 1: The "What & Where" -->
+            <div class="step">
+                <h2>The What & Where</h2>
+                <div class="form-group">
+                    <label for="cover-image">Cover Image</label>
+                    <input type="file" id="cover-image" class="input">
+                </div>
+                <div class="form-group">
+                    <label for="event-title">Event Title</label>
+                    <input type="text" id="event-title" class="input" placeholder="e.g., Rooftop Sunset Soiree">
+                </div>
+                <div class="form-group">
+                    <label for="description">Event Description</label>
+                    <textarea id="description" class="textarea" rows="4"></textarea>
+                </div>
+                 <div class="form-group">
+                    <label for="start-time">Start Time</label>
+                    <input type="datetime-local" id="start-time" class="input">
+                </div>
+                 <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" id="location" class="input" placeholder="e.g., Prospect Park Boathouse">
+                </div>
+            </div>
+
+            <hr style="margin: var(--space-5) 0; border: 1px solid var(--neutral-100);">
+
+            <!-- Step 2: The "Rules & How" -->
+            <div class="step">
+                <h2>The Rules & How</h2>
+                <div class="form-group">
+                    <label>Ticket Pricing</label>
+                    <select class="input">
+                        <option>Free RSVP</option>
+                        <option>Donation-Based</option>
+                        <option>Fixed Price</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Guest List Visibility</label>
+                    <select class="input">
+                        <option>Public</option>
+                        <option>Attendees (Live)</option>
+                        <option>Private</option>
+                    </select>
+                </div>
+                <div class="form-group d-flex align-items-center gap-3">
+                     <input type="checkbox" id="is-private" style="width: auto;">
+                    <label for="is-private" style="margin-bottom: 0;">Private Event - Invite Only</label>
+                </div>
+            </div>
+
+            <a href="#" class="btn btn-primary mt-4">Publish Event</a>
+
+        </main>
+    </div>
+
+    <script src="js/mobile_script.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Micasa - Event: Brooklyn Warehouse Party</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="textured-bg">
+
+    <header class="container text-center">
+        <h1 class="font-display" style="font-size: var(--text-2xl); color: var(--deep-teal);">Micasa</h1>
+    </header>
+
+    <main class="container" style="padding-top: 0;">
+        <!-- Event Main Info -->
+        <div class="card">
+            <img src="https://via.placeholder.com/800x400.png/BD9FD1/390F37?text=Event+Cover+Image" alt="Abstract purple and orange shapes" style="width: 100%; border-radius: var(--radius-md); margin-bottom: var(--space-5);">
+
+            <h1 style="font-family: var(--font-display);">Brooklyn Warehouse Party</h1>
+            <p style="font-family: var(--font-mono); font-size: var(--text-lg); color: var(--neutral-700);">Sat, Oct 26, 2024 @ 9:00 PM</p>
+            <p>Join us for an unforgettable night of music, art, and collaboration in the heart of Bushwick. Immersive installations, live DJ sets, and a community of creators.</p>
+            <p style="font-weight: 600;">Location: Bushwick, Brooklyn (Full address revealed upon RSVP)</p>
+
+            <div class="d-flex align-items-center gap-4 mt-5">
+                <button class="btn btn-primary" style="flex-grow: 1;" data-modal-trigger="rsvp-modal">RSVP Now</button>
+                <a href="#open-positions" class="btn btn-secondary" style="flex-grow: 1;">Apply to Collaborate</a>
+            </div>
+             <!-- Alternate state for logged-in, RSVP'd user -->
+            <!--
+            <div class="mt-5" style="background-color: var(--sage); color: white; padding: var(--space-3); border-radius: var(--radius-sm); text-align: center;">
+                <p style="margin: 0; font-weight: 600;">✓ You're going!</p>
+                <a href="#" class="btn btn-secondary mt-3" style="background-color: white; color: var(--sage);" data-modal-trigger="rsvp-modal">Change RSVP Status</a>
+            </div>
+            -->
+        </div>
+
+        <!-- Event Team Section -->
+        <section class="card">
+            <h2>The Creative Team</h2>
+            <div id="event-team" class="d-flex gap-5" style="flex-wrap: wrap;">
+                <!-- Host -->
+                <a href="w7_public_profile.html" class="team-member text-center" style="text-decoration: none; color: inherit;">
+                    <img src="https://via.placeholder.com/100x100.png/390F37/F5F2F2?text=M" alt="Profile picture of Maya" style="border-radius: var(--radius-full); margin: 0 auto var(--space-2);">
+                    <p style="font-weight: 600; margin-bottom: var(--space-1);">Maya</p>
+                    <span class="badge badge-host">Host</span>
+                </a>
+                <!-- Co-Host -->
+                <a href="w7_public_profile.html" class="team-member text-center" style="text-decoration: none; color: inherit;">
+                    <img src="https://via.placeholder.com/100x100.png/167070/F5F2F2?text=J" alt="Profile picture of Jordan" style="border-radius: var(--radius-full); margin: 0 auto var(--space-2);">
+                    <p style="font-weight: 600; margin-bottom: var(--space-1);">Jordan</p>
+                    <span class="badge badge-cohost">Co-host</span>
+                </a>
+                <!-- Collaborator -->
+                <a href="w7_public_profile.html" class="team-member text-center" style="text-decoration: none; color: inherit;">
+                    <img src="https://via.placeholder.com/100x100.png/44857D/F5F2F2?text=S" alt="Profile picture of Sam" style="border-radius: var(--radius-full); margin: 0 auto var(--space-2);">
+                    <p style="font-weight: 600; margin-bottom: var(--space-1);">Sam</p>
+                    <span class="badge badge-collaborator">DJ</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- "Who's Going" Section -->
+        <section class="card">
+            <h2>Who's Going</h2>
+            <div class="d-flex align-items-center gap-3">
+                <div class="d-flex">
+                    <img src="https://via.placeholder.com/40x40.png/FF8A01/FFFFFF?text=J" alt="Avatar" style="border-radius: var(--radius-full); border: 2px solid white; margin-left: -12px;">
+                    <img src="https://via.placeholder.com/40x40.png/FE4C01/FFFFFF?text=A" alt="Avatar" style="border-radius: var(--radius-full); border: 2px solid white; margin-left: -12px;">
+                    <img src="https://via.placeholder.com/40x40.png/815288/FFFFFF?text=K" alt="Avatar" style="border-radius: var(--radius-full); border: 2px solid white; margin-left: -12px;">
+                </div>
+                <p style="margin: 0;">Jane, Alex, and 23 others are going.</p>
+            </div>
+        </section>
+
+        <!-- Open Positions Section -->
+        <section id="open-positions" class="card">
+            <h2>Open Positions</h2>
+            <div class="position-list">
+                <!-- Position 1 -->
+                <div class="d-flex justify-content-between align-items-center mb-3" style="padding: var(--space-3); background: var(--neutral-50); border-radius: var(--radius-sm);">
+                    <h3 style="font-family: var(--font-body); font-size: var(--text-lg); margin: 0;">Installation Artist</h3>
+                    <button class="btn btn-secondary" data-modal-trigger="apply-modal">Apply</button>
+                </div>
+                <!-- Position 2 -->
+                <div class="d-flex justify-content-between align-items-center" style="padding: var(--space-3); background: var(--neutral-50); border-radius: var(--radius-sm);">
+                    <h3 style="font-family: var(--font-body); font-size: var(--text-lg); margin: 0;">Bartender</h3>
+                    <button class="btn btn-secondary" data-modal-trigger="apply-modal">Apply</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="container text-center" style="padding-top: 0; padding-bottom: var(--space-5);">
+        <p style="font-size: var(--text-sm); color: var(--neutral-500);">Micasa Wireframe v1.0</p>
+    </footer>
+
+    <!-- Modals will be added here in the next steps -->
+
+    <!-- RSVP Modal (W-2) -->
+    <div class="modal-overlay" id="rsvp-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 style="margin-bottom: 0;">Join the Event</h2>
+                <button class="modal-close-btn" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Step 1: Authentication & RSVP -->
+                <div class="step">
+                    <h3 style="font-family: var(--font-body); font-weight: 600;">First, let's get you on the list.</h3>
+                    <p>Continue with your preferred service to RSVP.</p>
+                    <button class="btn btn-primary" style="width: 100%; margin-bottom: var(--space-3); background: #4285F4;">Continue with Google</button>
+                    <button class="btn btn-primary" style="width: 100%; margin-bottom: var(--space-3); background: #000000;">Continue with Apple</button>
+                    <a href="#">Continue with Email</a>
+                </div>
+
+                <hr style="margin: var(--space-5) 0; border: 1px solid var(--neutral-100);">
+
+                <!-- Step 2: Optional Donation -->
+                <div class="step">
+                    <h3 style="font-family: var(--font-body); font-weight: 600;">Thanks for RSVPing!</h3>
+                    <p>Donations help support the creators. Feel free to contribute any amount.</p>
+                    <div class="form-group">
+                        <label for="donation-amount">Donation Amount ($)</label>
+                        <input type="text" id="donation-amount" class="input" placeholder="e.g., 10">
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%;">Donate</button>
+                    <a href="#" class="d-block text-center mt-3 modal-close-btn">Maybe Later</a>
+                </div>
+
+                <hr style="margin: var(--space-5) 0; border: 1px solid var(--neutral-100);">
+
+                <!-- Step 3: Profile Nudge -->
+                <div class="step">
+                    <h3 style="font-family: var(--font-body); font-weight: 600;">Help the host recognize you!</h3>
+                    <p>This is optional, but helps build community.</p>
+                    <div class="form-group">
+                        <label for="profile-pic">Profile Picture</label>
+                        <input type="file" id="profile-pic" class="input">
+                    </div>
+                    <div class="form-group">
+                        <label for="profile-bio">Short Bio</label>
+                        <textarea id="profile-bio" class="textarea" placeholder="Tell everyone a little about yourself..."></textarea>
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%;">Save & Finish</button>
+                    <a href="#" class="d-block text-center mt-3 modal-close-btn">Skip for Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Apply for Position Modal (W-4) -->
+    <div class="modal-overlay" id="apply-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 style="margin-bottom: 0;">Apply for Position</h2>
+                <button class="modal-close-btn" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Step 1: Basic Profile Completion (Conditional) -->
+                <div class="step">
+                    <h3 style="font-family: var(--font-body); font-weight: 600;">Complete Your Profile</h3>
+                    <p>A complete profile helps you stand out.</p>
+                    <div class="form-group">
+                        <label for="apply-photo">Profile Photo</label>
+                        <input type="file" id="apply-photo" class="input">
+                    </div>
+                    <div class="form-group">
+                        <label for="apply-bio">Bio</label>
+                        <textarea id="apply-bio" class="textarea" placeholder="Your bio..."></textarea>
+                    </div>
+                     <div class="form-group">
+                        <label for="apply-ig">Instagram Handle</label>
+                        <input type="text" id="apply-ig" class="input" placeholder="@username">
+                    </div>
+                     <div class="form-group">
+                        <label for="apply-website">Personal Website</label>
+                        <input type="url" id="apply-website" class="input" placeholder="https://your-site.com">
+                    </div>
+                </div>
+
+                <hr style="margin: var(--space-5) 0; border: 1px solid var(--neutral-100);">
+
+                <!-- Step 2: Application Message -->
+                <div class="step">
+                    <h3 style="font-family: var(--font-body); font-weight: 600;">Application Message</h3>
+                    <p>Applying for: <strong class="position-title-placeholder">Installation Artist</strong></p>
+                    <div class="form-group">
+                        <label for="apply-message">Cover Letter</label>
+                        <textarea id="apply-message" class="textarea" placeholder="Why are you a good fit for this role?"></textarea>
+                    </div>
+                    <a href="w5_success.html" class="btn btn-primary" style="width: 100%;">Submit Application</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js" defer></script>
+</body>
+</html>

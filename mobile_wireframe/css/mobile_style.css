@@ -1,0 +1,363 @@
+/* Micasa Design System - CSS Implementation */
+/* Based on docs/micasa-design-system.md */
+
+/* 1. ROOT & CUSTOM PROPERTIES */
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
+
+:root {
+  /* Color System */
+  --deep-purple: #390F37;
+  --medium-purple: #815288;
+  --light-purple: #BD9FD1;
+  --vibrant-orange: #FE4C01;
+  --warm-orange: #FF8A01;
+  --light-peach: #FFB381;
+  --deep-teal: #003D59;
+  --forest-green: #167070;
+  --sage: #44857D;
+  --coral-red: #FF5558;
+  --success-green: #44857D; /* Same as sage */
+  --warning-amber: #FF8A01; /* Same as warm-orange */
+
+  /* Neutrals */
+  --neutral-950: #0A0809;
+  --neutral-900: #1A1618;
+  --neutral-800: #2B2529;
+  --neutral-700: #3C3539;
+  --neutral-600: #4D4649;
+  --neutral-500: #6B6565;
+  --neutral-400: #898383;
+  --neutral-300: #A7A1A1;
+  --neutral-200: #C5BFBF;
+  --neutral-100: #E3DDDD;
+  --neutral-50:  #F5F2F2;
+
+  /* Typography */
+  --font-display: 'Instrument Serif', Georgia, serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+
+  /* Type Scale (Mobile-First) */
+  --text-xs:   0.75rem;   /* 12px */
+  --text-sm:   0.875rem;  /* 14px */
+  --text-base: 1rem;      /* 16px */
+  --text-lg:   1.125rem;  /* 18px */
+  --text-xl:   1.5rem;    /* 24px */
+  --text-2xl:  2rem;      /* 32px */
+  --text-3xl:  2.5rem;    /* 40px */
+
+  /* Spacing System */
+  --space-1: 0.25rem;   /* 4px */
+  --space-2: 0.5rem;    /* 8px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.5rem;    /* 24px */
+  --space-6: 2.5rem;    /* 40px */
+  --space-7: 4rem;      /* 64px */
+  --space-8: 6.5rem;    /* 104px */
+
+  /* Layout */
+  --layer-base: 0;
+  --layer-card: 1;
+  --layer-float: 2;
+  --layer-modal: 10;
+  --layer-popover: 15;
+  --layer-toast: 20;
+
+  /* Border Radius */
+  --radius-sm: 0.375rem;  /* 6px */
+  --radius-md: 0.75rem;   /* 12px */
+  --radius-lg: 1rem;      /* 16px */
+  --radius-xl: 1.5rem;    /* 24px */
+  --radius-full: 9999px;
+}
+
+/* 2. BASE & RESET STYLES */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--neutral-900);
+  background-color: var(--neutral-300);
+  line-height: 1.5;
+
+  /* For mobile wireframe layout */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--space-5);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: var(--space-3);
+}
+
+h1 { font-size: var(--text-2xl); }
+h2 { font-size: var(--text-xl); }
+h3 { font-size: var(--text-lg); }
+
+p {
+  margin-bottom: var(--space-4);
+}
+
+a {
+  color: var(--deep-purple);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 3. COMPONENT PATTERNS */
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: var(--text-base);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-sm);
+  border: 2px solid transparent;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s ease;
+  width: 100%; /* Mobile buttons are often full-width */
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--deep-purple) 0%, #4A1248 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(57, 15, 55, 0.25);
+  border: none;
+}
+
+.btn-secondary {
+  background: white;
+  color: var(--deep-purple);
+  border-color: currentColor;
+  border-radius: var(--radius-sm) var(--radius-sm) calc(var(--radius-sm) * 1.2) calc(var(--radius-sm) * 0.9);
+}
+
+/* Cards */
+.card {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.06);
+  position: relative;
+  margin-bottom: var(--space-4);
+}
+
+/* Form Elements */
+.form-group {
+  margin-bottom: var(--space-4);
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: var(--space-2);
+  font-size: var(--text-sm);
+}
+
+.input, .textarea {
+  width: 100%;
+  background: var(--neutral-50);
+  border: 1px solid var(--neutral-200);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  transition: all 0.2s ease;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+}
+
+.input:focus, .textarea:focus {
+  outline: none;
+  border-color: var(--deep-purple);
+  box-shadow: 0 0 0 3px rgba(129, 82, 136, 0.2);
+}
+
+/* Badges & Tags */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transform: rotate(-1.5deg);
+}
+
+.badge-host { background: var(--deep-purple); color: white; }
+.badge-cohost { background: var(--forest-green); color: white; }
+.badge-collaborator { background: var(--sage); color: white; }
+.badge-attendee { background: var(--medium-purple); color: white; }
+.badge-going { background: var(--success-green); color: white; }
+.badge-maybe { background: var(--warm-orange); color: white; }
+
+
+/* 4. UTILITY & LAYOUT CLASSES */
+.text-center { text-align: center; }
+.d-flex { display: flex; }
+.align-items-center { align-items: center; }
+.justify-content-between { justify-content: space-between; }
+.gap-2 { gap: var(--space-2); }
+.gap-3 { gap: var(--space-3); }
+.gap-4 { gap: var(--space-4); }
+.mt-4 { margin-top: var(--space-4); }
+.mb-0 { margin-bottom: 0; }
+
+/* 5. MOBILE WIREFRAME SPECIFIC STYLES */
+
+.mobile-screen {
+    width: 100%;
+    max-width: 390px; /* iPhone 12/13 Pro width */
+    height: 844px; /* iPhone 12/13 Pro height */
+    max-height: 90vh;
+    background-color: var(--neutral-50);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2), 0 0 0 8px var(--neutral-900);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative; /* For FAB positioning */
+}
+
+.mobile-screen.textured-bg {
+    background-image:
+      radial-gradient(circle at 20% 80%, var(--light-purple) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, var(--light-peach) 0%, transparent 50%);
+    background-attachment: fixed;
+}
+
+.mobile-header {
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--neutral-200);
+    background: white;
+    flex-shrink: 0;
+}
+
+.mobile-header h1 {
+    font-size: var(--text-lg);
+    margin: 0;
+    text-align: center;
+}
+
+.mobile-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: var(--space-4);
+}
+
+/* Custom scrollbar for mobile view */
+.mobile-content::-webkit-scrollbar {
+    width: 4px;
+}
+.mobile-content::-webkit-scrollbar-thumb {
+    background: var(--neutral-300);
+    border-radius: 4px;
+}
+
+.bottom-nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: var(--space-2) 0;
+    border-top: 1px solid var(--neutral-200);
+    background-color: rgba(255,255,255,0.9);
+    backdrop-filter: blur(5px);
+    z-index: var(--layer-float);
+    flex-shrink: 0;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
+    color: var(--neutral-500);
+    text-decoration: none;
+    font-size: var(--text-xs);
+    flex-grow: 1;
+    padding: var(--space-1) 0;
+}
+
+.nav-item.active {
+    color: var(--deep-purple);
+    font-weight: 600;
+}
+
+/* FAB - Floating Action Button */
+.fab {
+    position: absolute;
+    bottom: 80px; /* Above nav bar */
+    right: 24px;
+    background: var(--vibrant-orange);
+    color: white !important;
+    border-radius: var(--radius-full);
+    padding: var(--space-3) var(--space-4);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: var(--text-base);
+    z-index: var(--layer-float);
+}
+.fab:hover {
+    text-decoration: none;
+}
+
+/* Tab styles for My Events */
+.tab-nav {
+    display: flex;
+    border-bottom: 1px solid var(--neutral-200);
+    margin-bottom: var(--space-4);
+}
+.tab-link {
+    flex-grow: 1;
+    text-align: center;
+    padding: var(--space-3);
+    text-decoration: none;
+    color: var(--neutral-600);
+    font-weight: 600;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+}
+.tab-link.active {
+    color: var(--deep-purple);
+    border-bottom-color: var(--deep-purple);
+}
+.tab-content {
+    display: none;
+}
+.tab-content.active {
+    display: block;
+}

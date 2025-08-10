@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Micasa Mobile - My Community</title>
+    <link rel="stylesheet" href="css/mobile_style.css">
+</head>
+<body>
+
+    <div class="mobile-screen">
+        <header class="mobile-header">
+            <h1>My Community</h1>
+        </header>
+
+        <main class="mobile-content">
+            <div class="d-flex gap-3 mb-4">
+                <a href="#" class="btn btn-secondary" style="flex-grow: 1;">Add Contact</a>
+                <a href="#" class="btn btn-secondary" style="flex-grow: 1;">Import</a>
+            </div>
+
+            <nav class="tab-nav">
+                <a class="tab-link active" data-target="all">All Contacts</a>
+                <a class="tab-link" data-target="by-event">By Event</a>
+            </nav>
+
+            <!-- All Contacts Tab -->
+            <div id="all" class="tab-content active">
+                <div class="card d-flex align-items-center gap-3">
+                    <img src="https://via.placeholder.com/40x40.png/390F37/F5F2F2?text=M" alt="Avatar" style="border-radius: var(--radius-full);">
+                    <strong style="flex-grow: 1;">Maya</strong>
+                    <span style="font-size: 1.2rem;">...</span>
+                </div>
+                 <div class="card d-flex align-items-center gap-3">
+                    <img src="https://via.placeholder.com/40x40.png/167070/F5F2F2?text=J" alt="Avatar" style="border-radius: var(--radius-full);">
+                    <strong style="flex-grow: 1;">Jordan</strong>
+                    <span style="font-size: 1.2rem;">...</span>
+                </div>
+                 <div class="card d-flex align-items-center gap-3">
+                    <img src="https://via.placeholder.com/40x40.png/neutral-300/F5F2F2?text=C" alt="Avatar" style="border-radius: var(--radius-full);">
+                    <strong style="flex-grow: 1;">Chris (Unlinked)</strong>
+                    <span style="font-size: 1.2rem;">...</span>
+                </div>
+            </div>
+
+            <!-- By Event Tab -->
+            <div id="by-event" class="tab-content">
+                <div class="card">
+                    <h4 class="mb-0">Brooklyn Warehouse Party</h4>
+                    <p class="mb-0" style="font-family: var(--font-mono); font-size: var(--text-sm);">Oct 26, 2024</p>
+                    <div class="d-flex mt-3">
+                         <img src="https://via.placeholder.com/32x32.png/390F37/F5F2F2?text=M" alt="Avatar" style="border-radius: var(--radius-full); border: 2px solid white; margin-left: -8px;">
+                         <img src="https://via.placeholder.com/32x32.png/167070/F5F2F2?text=J" alt="Avatar" style="border-radius: var(--radius-full); border: 2px solid white; margin-left: -8px;">
+                         <img src="https://via.placeholder.com/32x32.png/44857D/F5F2F2?text=S" alt="Avatar" style="border-radius: var(--radius-full); border: 2px solid white; margin-left: -8px;">
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <nav class="bottom-nav">
+             <a href="index.html" class="nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                <span>Home</span>
+            </a>
+            <a href="my_events.html" class="nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                <span>My Events</span>
+            </a>
+            <a href="my_community.html" class="nav-item active">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                <span>Community</span>
+            </a>
+            <a href="my_profile.html" class="nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="10" r="3"></circle><path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"></path></svg>
+                <span>Profile</span>
+            </a>
+        </nav>
+    </div>
+
+    <script src="js/mobile_script.js" defer></script>
+</body>
+</html>
