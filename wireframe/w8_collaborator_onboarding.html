@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Micasa - Collaborator Onboarding</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="textured-bg">
+
+    <header class="container text-center">
+        <h1 class="font-display" style="font-size: var(--text-2xl); color: var(--deep-teal);">Micasa</h1>
+    </header>
+
+    <main class="container" style="padding-top:0;">
+        <div class="card">
+            <!-- Step 1: Account Creation -->
+            <div class="step">
+                <h2 class="text-center">You're Invited! Create an Account to Accept.</h2>
+                <p class="text-center">Joining <strong style="color: var(--deep-purple);">Brooklyn Warehouse Party</strong> as a collaborator.</p>
+
+                <div class="form-group mt-5">
+                    <button class="btn btn-primary" style="width: 100%; margin-bottom: var(--space-3); background: #4285F4;">Continue with Google</button>
+                    <button class="btn btn-primary" style="width: 100%; margin-bottom: var(--space-3); background: #000000;">Continue with Apple</button>
+                </div>
+
+                <p class="text-center">or</p>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" class="input" placeholder="you@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" class="input">
+                </div>
+                <button class="btn btn-secondary" style="width: 100%;">Sign up with Email</button>
+            </div>
+
+            <hr style="margin: var(--space-6) 0; border: 1px solid var(--neutral-100);">
+
+            <!-- Step 2: Profile & Phone Verification -->
+            <div class="step">
+                <h2 class="text-center">Just one last step...</h2>
+                <p class="text-center">Please set a unique username and confirm your phone number to finalize your acceptance.</p>
+                <p class="text-center" style="background: var(--neutral-100); padding: var(--space-3); border-radius: var(--radius-sm); margin-top: var(--space-3);">
+                    <strong style="color: var(--forest-green);">Welcome to the team!</strong> As a co-host, you'll have access to guest management tools.
+                </p>
+
+                <div class="form-group mt-5">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" class="input" placeholder="your-unique-username">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <p style="font-family: var(--font-mono); font-size: var(--text-lg);">Verifying: +1 555-123-4567</p>
+                </div>
+                <div class="form-group">
+                    <label for="otp">Verification Code</label>
+                    <input type="text" id="otp" class="input" placeholder="123456">
+                    <a href="#" style="font-size: var(--text-sm); display: block; margin-top: var(--space-2);">Resend Code</a>
+                </div>
+                <a href="w9_profile_nudge.html" class="btn btn-primary" style="width: 100%;">Verify & Complete Acceptance</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="container text-center" style="padding-top: 0; padding-bottom: var(--space-5);">
+        <p style="font-size: var(--text-sm); color: var(--neutral-500);">Micasa Wireframe v1.0</p>
+    </footer>
+
+    <script src="js/script.js" defer></script>
+</body>
+</html>

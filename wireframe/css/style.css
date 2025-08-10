@@ -1,0 +1,406 @@
+/* Micasa Design System - CSS Implementation */
+/* Based on docs/micasa-design-system.md */
+
+/* 1. ROOT & CUSTOM PROPERTIES */
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
+
+:root {
+  /* Color System */
+  --deep-purple: #390F37;
+  --medium-purple: #815288;
+  --light-purple: #BD9FD1;
+  --vibrant-orange: #FE4C01;
+  --warm-orange: #FF8A01;
+  --light-peach: #FFB381;
+  --deep-teal: #003D59;
+  --forest-green: #167070;
+  --sage: #44857D;
+  --coral-red: #FF5558;
+  --success-green: #44857D; /* Same as sage */
+  --warning-amber: #FF8A01; /* Same as warm-orange */
+
+  /* Neutrals */
+  --neutral-950: #0A0809;
+  --neutral-900: #1A1618;
+  --neutral-800: #2B2529;
+  --neutral-700: #3C3539;
+  --neutral-600: #4D4649;
+  --neutral-500: #6B6565;
+  --neutral-400: #898383;
+  --neutral-300: #A7A1A1;
+  --neutral-200: #C5BFBF;
+  --neutral-100: #E3DDDD;
+  --neutral-50:  #F5F2F2;
+
+  /* Typography */
+  /* NOTE: Using Google Fonts as a replacement for 'Dallas Print Shop' */
+  --font-display: 'Instrument Serif', Georgia, serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+
+  /* Type Scale (Mobile-First) */
+  --text-xs:   0.75rem;   /* 12px */
+  --text-sm:   0.875rem;  /* 14px */
+  --text-base: 1rem;      /* 16px */
+  --text-lg:   1.125rem;  /* 18px */
+  --text-xl:   1.5rem;    /* 24px */
+  --text-2xl:  2rem;      /* 32px */
+  --text-3xl:  2.5rem;    /* 40px */
+
+  /* Spacing System */
+  --space-1: 0.25rem;   /* 4px */
+  --space-2: 0.5rem;    /* 8px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.5rem;    /* 24px */
+  --space-6: 2.5rem;    /* 40px */
+  --space-7: 4rem;      /* 64px */
+  --space-8: 6.5rem;    /* 104px */
+
+  /* Layout */
+  --layer-base: 0;
+  --layer-card: 1;
+  --layer-float: 2;
+  --layer-modal: 10;
+  --layer-popover: 15;
+  --layer-toast: 20;
+
+  /* Border Radius */
+  --radius-sm: 0.375rem;  /* 6px */
+  --radius-md: 0.75rem;   /* 12px */
+  --radius-lg: 1rem;      /* 16px */
+  --radius-xl: 1.5rem;    /* 24px */
+  --radius-full: 9999px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Desktop Type Scale Adjustments */
+@media (min-width: 768px) {
+  :root {
+    --text-xl:  1.75rem;   /* 28px */
+    --text-2xl: 2.25rem;   /* 36px */
+    --text-3xl: 3rem;      /* 48px */
+  }
+}
+
+/* 2. BASE & RESET STYLES */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--neutral-900);
+  background-color: var(--neutral-50);
+  line-height: 1.6;
+}
+
+/* Textured background from design system */
+body.textured-bg {
+  background-image:
+    radial-gradient(circle at 20% 80%, var(--light-purple) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, var(--light-peach) 0%, transparent 50%);
+  background-attachment: fixed;
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: var(--space-4);
+}
+
+h1 { font-size: var(--text-3xl); }
+h2 { font-size: var(--text-2xl); }
+h3 { font-size: var(--text-xl); }
+h4 { font-size: var(--text-lg); }
+
+p {
+  margin-bottom: var(--space-4);
+}
+
+a {
+  color: var(--deep-purple);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 3. COMPONENT PATTERNS */
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: var(--text-base);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-sm);
+  border: 2px solid transparent;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--deep-purple) 0%, #4A1248 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(57, 15, 55, 0.25);
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(57, 15, 55, 0.35);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(57, 15, 55, 0.25);
+}
+
+.btn-secondary {
+  background: white;
+  color: var(--deep-purple);
+  border-color: currentColor;
+  /* Intentionally imperfect border from design system */
+  border-radius: var(--radius-sm) var(--radius-sm) calc(var(--radius-sm) * 1.2) calc(var(--radius-sm) * 0.9);
+}
+
+.btn-secondary:hover {
+    background: var(--neutral-50);
+    transform: translateY(-1px);
+}
+
+/* Cards */
+.card {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    0 4px 16px rgba(0, 0, 0, 0.08);
+  position: relative;
+  margin-bottom: var(--space-5);
+}
+
+/* Form Elements */
+.form-group {
+  margin-bottom: var(--space-4);
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: var(--space-2);
+  font-size: var(--text-sm);
+}
+
+.input, .textarea {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.7);
+  border: 2px solid transparent;
+  border-bottom-color: var(--neutral-300);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  padding: var(--space-3) var(--space-4);
+  transition: all 0.2s ease;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+}
+
+.input:focus, .textarea:focus {
+  outline: none;
+  background: white;
+  border-bottom-color: var(--deep-purple);
+  box-shadow: 0 4px 12px rgba(57, 15, 55, 0.1);
+}
+
+.textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* Badges & Tags */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  /* Slightly imperfect circle from design system */
+  transform: rotate(-1.5deg);
+}
+
+.badge-host {
+  background: var(--deep-purple);
+  color: white;
+}
+
+.badge-cohost {
+  background: var(--forest-green);
+  color: white;
+}
+
+.badge-collaborator {
+    background: var(--sage);
+    color: white;
+}
+
+
+/* 4. UTILITY & LAYOUT CLASSES */
+.container {
+    max-width: 1024px;
+    margin: 0 auto;
+    padding: var(--space-6) var(--space-5);
+}
+
+.text-center {
+    text-align: center;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.align-items-center {
+    align-items: center;
+}
+
+.justify-content-between {
+    justify-content: space-between;
+}
+
+.gap-2 {
+    gap: var(--space-2);
+}
+.gap-3 {
+    gap: var(--space-3);
+}
+.gap-4 {
+    gap: var(--space-4);
+}
+
+
+.mt-1 { margin-top: var(--space-1); }
+.mt-2 { margin-top: var(--space-2); }
+.mt-3 { margin-top: var(--space-3); }
+.mt-4 { margin-top: var(--space-4); }
+.mt-5 { margin-top: var(--space-5); }
+
+.mb-1 { margin-bottom: var(--space-1); }
+.mb-2 { margin-bottom: var(--space-2); }
+.mb-3 { margin-bottom: var(--space-3); }
+.mb-4 { margin-bottom: var(--space-4); }
+.mb-5 { margin-bottom: var(--space-5); }
+
+
+/* 5. MODAL STYLES */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(10, 8, 9, 0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: var(--layer-modal);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s var(--ease-out);
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: var(--neutral-50);
+    padding: var(--space-6);
+    border-radius: var(--radius-lg);
+    width: 90%;
+    max-width: 500px;
+    transform: scale(0.95) translateY(10px);
+    transition: transform 0.3s var(--ease-out);
+}
+
+.modal-overlay.active .modal-content {
+    transform: scale(1) translateY(0);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-4);
+}
+
+.modal-close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--neutral-500);
+}
+
+
+/* 6. ACCESSIBILITY */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+a:focus-visible, button:focus-visible, .input:focus, .textarea:focus {
+    outline: 3px solid var(--medium-purple);
+    outline-offset: 2px;
+}
+
+/* Hide content visually while keeping it accessible to screen readers */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
